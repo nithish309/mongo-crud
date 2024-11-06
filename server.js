@@ -61,6 +61,49 @@ app.get('/api/posts',async(req,res)=>{
   
 })
 
+// get post by id
+app.get('/api/posts/:id',async(req,res)=>{
+  try {
+    const post=await POST.findById(req.params.id)
+    res.status(200).json(post)
+  } catch (error) {
+    res.status(500).json({error:error.message})
+  }
+  
+})
+
+//update post
+
+app.put('/api/posts/:id',async(req,res)=>{
+  try{
+    const post= await POST.findByIdAndUpdate(req.params.id,req.body,{
+      new:true,
+    })
+    if(post){
+      res.status(200).json(post)
+    }else{
+      res.status(404).json("id doesnot exist")
+    }
+  }catch(error){
+    res.status(500).json({error:error.message})
+  }
+})
+
+//delete post
+
+app.delete('/api/posts/:id',async(req,res)=>{
+  try{
+    const post= await POST.findByIdAndDelete(req.params.id)
+    if(post){
+      res.status(200).json(post)
+    }else{
+      res.status(404).json("id doesnot exist")
+    }
+  }catch(error){
+    res.status(500).json({error:error.message})
+  }
+})
+
 
 // Start the server
 const PORT = process.env.PORT || 3000;
